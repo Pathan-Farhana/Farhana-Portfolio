@@ -70,6 +70,12 @@
     text-decoration: none;
   }
 
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
   .nav-links {
     display: flex;
     gap: 2.5rem;
@@ -86,6 +92,39 @@
   }
 
   .nav-links a:hover { color: var(--text); }
+
+  .visitor-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border: 1px solid var(--line2);
+    padding: 0.35rem 0.75rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .visitor-counter .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent3);
+    flex-shrink: 0;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .visitor-counter .count {
+    color: var(--accent);
+    font-weight: 400;
+  }
 
   /* HERO */
   #hero {
@@ -847,6 +886,8 @@
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
+    .nav-right { gap: 1rem; }
+    .visitor-counter { font-size: 0.65rem; padding: 0.3rem 0.6rem; }
     #hero { grid-template-columns: 1fr; }
     .hero-left { padding: 7rem 1.5rem 3rem; border-right: none; border-bottom: 1px solid var(--line); }
     .hero-right { padding: 3rem 1.5rem; }
@@ -868,13 +909,19 @@
 
 <nav>
   <a href="#hero" class="nav-logo">Farhana Pathan</a>
-  <ul class="nav-links">
-    <li><a href="#identity">About</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#achievements">Achievements</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#identity">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="visitor-counter" id="visitorCounter">
+      <span class="dot"></span>
+      <span class="count" id="visitorCount">—</span> views
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -890,7 +937,7 @@
       Full-stack engineer and CS undergraduate who ships end-to-end products—from real-time AI systems to data-driven web platforms. Passionate about the intersection of technology and strategy.
     </p>
     <div class="hero-cta">
-      <a href="#projects" class="btn-primary">View Projects →</a>
+      <a href="https://drive.google.com/file/d/19fJkgMDknb4XrjIZqRsYFXFlD0OPB1GM/view?usp=drive_link" target="_blank" rel="noopener" class="btn-primary">Resume →</a>
       <a href="#contact" class="btn-ghost">Get in Touch</a>
     </div>
   </div>
@@ -1349,6 +1396,23 @@
       el.style.transform = 'none';
     }, 50);
   });
+
+  // Visitor counter using CounterAPI (free, no signup required)
+  // Replace "farhana-pathan-portfolio" with any unique slug if you want to reset/separate the count
+  (function () {
+    const counterEl = document.getElementById('visitorCount');
+    const namespace = 'farhana-pathan-portfolio';
+    const key = 'visits';
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+      .then(res => res.json())
+      .then(data => {
+        const count = data && (data.count ?? data.value ?? data.data?.up_count);
+        counterEl.textContent = (count !== undefined) ? count.toLocaleString() : '—';
+      })
+      .catch(() => {
+        counterEl.textContent = '—';
+      });
+  })();
 </script>
 </body>
 </html>
